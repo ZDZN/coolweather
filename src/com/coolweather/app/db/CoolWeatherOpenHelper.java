@@ -8,14 +8,14 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 
 	/**
-	 * Province±í´´½¨Óï¾ä
+	 * Provinceè¡¨åˆ›å»ºè¯­å¥
 	 */
 	public static final String CREATE_PROVINCE="CREATE TABLE Province("
 						+"id integer primary key autoincrement,"
 						+"province_name text,"
 						+"province_code text);";
 	/**
-	 * City±í´´½¨Óï¾ä
+	 * Cityè¡¨åˆ›å»ºè¯­å¥
 	 */
 	public static final String CREATE_CITY="CREATE TABLE City("
 						+"id integer primary key autoincrement,"
@@ -23,7 +23,7 @@ public class CoolWeatherOpenHelper extends SQLiteOpenHelper {
 						+"city_code text,"
 						+"province_id integer);";
 	/**
-	 * County±í´´½¨Óï¾ä
+	 * Countyè¡¨åˆ›å»ºè¯­å¥
 	 */
 	public static final String CREATE_COUNTY="CREATE TABLE County("
 						+"id integer primary key autoincrement,"

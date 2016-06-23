@@ -4,5 +4,11 @@
     <string name="app_name">CoolWeather</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="country_name">中国</string>
+    <string name="address_file_url">http://www.weather.com.cn/data/list3/city.xml</string>
+    <string name="address_dir_url">http://www.weather.com.cn/data/list3/city</string>
+    <string name="xml_file_suf">.xml</string>
+    <string name="load_data_failure">加载失败</string>
+    <string name="loading_data_msg">正在加载&#8230;</string>
 
 </resources>
