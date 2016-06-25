@@ -7,8 +7,18 @@
     <string name="country_name">中国</string>
     <string name="address_file_url">http://www.weather.com.cn/data/list3/city.xml</string>
     <string name="address_dir_url">http://www.weather.com.cn/data/list3/city</string>
+    <string name="weather_file_url">http://www.weather.com.cn/data/cityinfo/</string>
     <string name="xml_file_suf">.xml</string>
+    <string name="html_file_suf">.html</string>
     <string name="load_data_failure">加载失败</string>
     <string name="loading_data_msg">正在加载&#8230;</string>
+    <string name="from_to_label">~</string>
+    <string name="year_unit_label">年</string>
+    <string name="month_unit_label">月</string>
+    <string name="day_unit_label">日</string>
+    <string name="synchro_msg">同步中&#8230;</string>
+    <string name="synchro_failure_text">一二三四五</string>
+    <string name="today_text">今天</string>
+    <string name="publish_text">发布</string>
 
 </resources>

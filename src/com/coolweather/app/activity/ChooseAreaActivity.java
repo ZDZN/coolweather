@@ -14,7 +14,9 @@ import com.coolweather.app.util.Utility;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
@@ -54,6 +56,9 @@ public class ChooseAreaActivity extends Activity{
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		if(checkCitySelected()){
+			return;
+		}
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.choose_area);
 		listView=(ListView)findViewById(R.id.list_view);
@@ -62,7 +67,6 @@ public class ChooseAreaActivity extends Activity{
 				dataList);
 		listView.setAdapter(adapter);
 		listView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
@@ -72,12 +76,26 @@ public class ChooseAreaActivity extends Activity{
 				}else if(currentLevel==LEVEL_CITY){
 					selectedCity=cityList.get(position);
 					queryCounties();
+				}else if(currentLevel==LEVEL_COUNTY){
+					WeatherActivity.WeatherActivityStart(ChooseAreaActivity.this,
+							countyList.get(position).getCountyCode());
+					finish();
 				}
-				
 			}
 		});
 		coolWeatherDB=CoolWeatherDB.getInstance(this);
 		queryProvinces();
+	}
+	
+	private boolean checkCitySelected(){
+		SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(this);
+		boolean citySelected=sharedPreferences.getBoolean("city_selected", false);
+		if(citySelected){
+			WeatherActivity.WeatherActivityStart(this);
+			finish();
+			return true;
+		}
+		return false;
 	}
 	
 	private void queryProvinces(){
