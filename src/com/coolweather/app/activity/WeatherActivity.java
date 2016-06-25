@@ -15,10 +15,11 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-public class WeatherActivity extends Activity {
+public class WeatherActivity extends Activity implements View.OnClickListener {
 	private LinearLayout weatherInfoLayout;
 	private TextView publishText;
 	private TextView currentDateText;
@@ -26,6 +27,10 @@ public class WeatherActivity extends Activity {
 	private TextView temp1Text;
 	private TextView temp2Text;
 	private TextView cityNameText;
+	private Button switchBtn;
+	private Button refreshBtn;
+	
+	private String countyCode;
 	
 	private static final String TYPE_COUNTY_CODE="countyCode";
 	private static final String TYPE_WEATHER_CODE="weatherCode";
@@ -51,7 +56,15 @@ public class WeatherActivity extends Activity {
 		temp1Text=(TextView)findViewById(R.id.temp1);
 		temp2Text=(TextView)findViewById(R.id.temp2);
 		cityNameText=(TextView)findViewById(R.id.title_text);
-		String countyCode=getIntent().getStringExtra("county_code");
+		switchBtn=(Button)findViewById(R.id.switch_city);
+		refreshBtn=(Button)findViewById(R.id.refresh_weather);
+		switchBtn.setEnabled(true);
+		refreshBtn.setEnabled(true);
+		switchBtn.setVisibility(View.VISIBLE);
+		refreshBtn.setVisibility(View.VISIBLE);
+		switchBtn.setOnClickListener(this);
+		refreshBtn.setOnClickListener(this);
+		countyCode=getIntent().getStringExtra("county_code");
 		if(!TextUtils.isEmpty(countyCode)){
 			publishText.setText(getResources().getString(R.string.synchro_msg));
 			weatherInfoLayout.setVisibility(View.INVISIBLE);
@@ -123,5 +136,24 @@ public class WeatherActivity extends Activity {
 		currentDateText.setText(sharedPreferences.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);
+	}
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.switch_city:
+			ChooseAreaActivity.ChooseAreaActivityStart(this, false);
+			finish();
+			break;
+		case R.id.refresh_weather:
+			publishText.setText(getResources().getString(R.string.synchro_msg));
+			if(!TextUtils.isEmpty(countyCode)){
+				queryWeatherCode(countyCode);
+			}
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 }

@@ -14,6 +14,8 @@ import com.coolweather.app.util.Utility;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -33,6 +35,7 @@ public class ChooseAreaActivity extends Activity{
 	public static final int LEVEL_CITY=1;
 	public static final int LEVEL_COUNTY=2;
 	private int currentLevel;
+	private boolean checkCity;
 	
 	public static final String TYPE_PROVINCE="province";
 	public static final String TYPE_CITY="city";
@@ -52,11 +55,17 @@ public class ChooseAreaActivity extends Activity{
 	private Province selectedProvince;
 	private City selectedCity;
 	
+	public static void ChooseAreaActivityStart(Context context,boolean checkCitySelected){
+		Intent intent=new Intent(context,ChooseAreaActivity.class);
+		intent.putExtra("checkCitySelected", checkCitySelected);
+		context.startActivity(intent);
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		if(checkCitySelected()){
+		checkCity=getIntent().getBooleanExtra("checkCitySelected", true);
+		if(checkCity&&checkCitySelected()){
 			return;
 		}
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -224,6 +233,9 @@ public class ChooseAreaActivity extends Activity{
 			queryCities();
 			break;
 		default:
+			if(checkCity){
+				WeatherActivity.WeatherActivityStart(this);
+			}
 			finish();
 			break;
 		}

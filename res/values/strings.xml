@@ -17,7 +17,7 @@
     <string name="month_unit_label">月</string>
     <string name="day_unit_label">日</string>
     <string name="synchro_msg">同步中&#8230;</string>
-    <string name="synchro_failure_text">一二三四五</string>
+    <string name="synchro_failure_text">同步失败</string>
     <string name="today_text">今天</string>
     <string name="publish_text">发布</string>
 
