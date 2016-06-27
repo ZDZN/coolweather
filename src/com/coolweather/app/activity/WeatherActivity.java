@@ -2,6 +2,7 @@ package com.coolweather.app.activity;
 
 
 import com.coolweather.app.R;
+import com.coolweather.app.service.AutoUpdateService;
 import com.coolweather.app.util.HttpCallbackListener;
 import com.coolweather.app.util.HttpUtil;
 import com.coolweather.app.util.Utility;
@@ -13,6 +14,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -30,10 +32,11 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 	private Button switchBtn;
 	private Button refreshBtn;
 	
-	private String countyCode;
+	private boolean isFirst;
 	
 	private static final String TYPE_COUNTY_CODE="countyCode";
 	private static final String TYPE_WEATHER_CODE="weatherCode";
+	private static final String TAG=WeatherActivity.class.getSimpleName();
 	
 	public static void WeatherActivityStart(Context context,String countyCode) {
 		Intent intent=new Intent(context,WeatherActivity.class);
@@ -64,13 +67,23 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 		refreshBtn.setVisibility(View.VISIBLE);
 		switchBtn.setOnClickListener(this);
 		refreshBtn.setOnClickListener(this);
-		countyCode=getIntent().getStringExtra("county_code");
+		isFirst=true;
+		String countyCode=getIntent().getStringExtra("county_code");
 		if(!TextUtils.isEmpty(countyCode)){
 			publishText.setText(getResources().getString(R.string.synchro_msg));
 			weatherInfoLayout.setVisibility(View.INVISIBLE);
 			cityNameText.setVisibility(View.INVISIBLE);
 			queryWeatherCode(countyCode);
 		}else{
+			isFirst=false;
+		}
+	}
+	
+	@Override
+	protected void onResume(){
+		super.onResume();
+		if(!isFirst){
+			Log.d(TAG, "onResume refresh data");
 			showWeather();
 		}
 	}
@@ -104,6 +117,7 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 					Utility.handleWeatherResponse(WeatherActivity.this, response);
 					runOnUiThread(new Runnable() {
 						public void run() {
+							isFirst=false;
 							showWeather();
 						}
 					});
@@ -136,6 +150,8 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 		currentDateText.setText(sharedPreferences.getString("current_date", ""));
 		weatherInfoLayout.setVisibility(View.VISIBLE);
 		cityNameText.setVisibility(View.VISIBLE);
+		Intent intent=new Intent(this,AutoUpdateService.class);
+		startService(intent);
 	}
 	@Override
 	public void onClick(View v) {
@@ -146,14 +162,17 @@ public class WeatherActivity extends Activity implements View.OnClickListener {
 			break;
 		case R.id.refresh_weather:
 			publishText.setText(getResources().getString(R.string.synchro_msg));
-			if(!TextUtils.isEmpty(countyCode)){
-				queryWeatherCode(countyCode);
+			SharedPreferences sharedPreferences=PreferenceManager.getDefaultSharedPreferences(this);
+			String weatherCode=sharedPreferences.getString("weather_code","");
+			if(!TextUtils.isEmpty(weatherCode)){
+				queryWeatherInfo(weatherCode);
 			}
 			break;
-
 		default:
 			break;
 		}
 		
 	}
+
+	
 }

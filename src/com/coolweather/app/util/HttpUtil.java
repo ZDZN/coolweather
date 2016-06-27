@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import android.os.Build;
+
 public class HttpUtil {
 	
 	public static void sendHttpRequest(final String address,
@@ -17,6 +19,9 @@ public class HttpUtil {
 				try {
 					URL url = new URL(address);
 					connection = (HttpURLConnection) url.openConnection();
+					if (Build.VERSION.SDK_INT > 13) {
+						connection.setRequestProperty("Connection", "close");
+	                }
 					connection.setRequestMethod("GET");
 					connection.setConnectTimeout(8000);
 					connection.setReadTimeout(8000);
